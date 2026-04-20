@@ -44,3 +44,7 @@ restclient/
 # Archivos de configuración locales
 .vscode/
 .idea/
+
+node_modules/
+.env
+log/
