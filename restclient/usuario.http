@@ -1,0 +1,62 @@
+@baseUrl = http://localhost:3000
+@adminToken = REEMPLAZAR_TOKEN_ADMIN
+@adminEmail = cuentadesoportea@gmail.com
+@usuarioEmail = usuario.restclient@example.com
+@usuarioNombre = Usuario REST Client
+@usuarioPassword = Password123@
+@usuarioRol = Usuario
+@usuarioInexistenteEmail = no-existe@example.com
+
+### Obtener usuarios
+GET {{baseUrl}}/api/usuarios
+Authorization: Bearer {{adminToken}}
+
+###
+
+### Obtener usuario por email
+GET {{baseUrl}}/api/usuarios/{{usuarioEmail}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+### Obtener usuario inexistente
+GET {{baseUrl}}/api/usuarios/{{usuarioInexistenteEmail}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+### Crear usuario
+POST {{baseUrl}}/api/usuarios
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+	"email": "{{usuarioEmail}}",
+	"password": "{{usuarioPassword}}",
+	"nombre": "{{usuarioNombre}}",
+	"rol": "{{usuarioRol}}"
+}
+
+###
+
+### Actualizar usuario
+PUT {{baseUrl}}/api/usuarios/{{usuarioEmail}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+	"nombre": "Usuario REST Client Editado",
+	"rol": "Administrador"
+}
+
+###
+
+### Eliminar usuario creado para pruebas
+DELETE {{baseUrl}}/api/usuarios/{{usuarioEmail}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+### Intentar eliminar usuario protegido
+DELETE {{baseUrl}}/api/usuarios/{{adminEmail}}
+Authorization: Bearer {{adminToken}}

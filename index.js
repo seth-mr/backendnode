@@ -1,10 +1,11 @@
 const express = require('express')
 const cors = require("cors")
 const dotenv = require('dotenv')
+const path = require('path')
 const app = express()
 
 // Primero carga la configuración del archivo .env para que este disponible en las demás llamadas
-dotenv.config()
+dotenv.config({ path: path.resolve(__dirname, '.env') })
 
 // Se requiere para entender los datos recibidos en JSON
 app.use(express.json())
