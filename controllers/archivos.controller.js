@@ -1,7 +1,18 @@
 const { archivo } = require('../models')
 const fs = require("fs")
 
+
+const { body, validationResult } = require('express-validator');
 let self = {}
+
+self.archivoValidator = [
+    body('mime', 'El campo {0} es obligatorio').not().isEmpty(),
+    body('mime', 'El campo {0} debe tener máximo 255 caracteres').isLength({ max: 255 }),
+    body('nombre', 'El campo {0} es obligatorio').not().isEmpty(),
+    body('nombre', 'El campo {0} debe tener máximo 255 caracteres').isLength({ max: 255 }),
+    body('size', 'El campo {0} es obligatorio').not().isEmpty().isInt({ min: 1 }),
+    body('indb').optional().isBoolean()
+]
 
 // GET: api/archivos
 self.getAll = async function (req, res, next) {

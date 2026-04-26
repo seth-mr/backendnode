@@ -9,10 +9,20 @@ router.get('/', Authorize('Usuario,Administrador'), categorias.getAll)
 router.get('/:id', Authorize('Usuario,Administrador'), categorias.get)
 
 // POST: api/categorias
-router.post('/', Authorize('Administrador'), categorias.categoriaValidator, categorias.create)
+router.post('/', Authorize('Administrador'), ...categorias.categoriaValidator, (req, res, next) => {
+	const { validationResult } = require('express-validator');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+	next();
+}, categorias.create)
 
 // PUT: api/categorias/5
-router.put('/:id', Authorize('Administrador'), categorias.categoriaValidator, categorias.update)
+router.put('/:id', Authorize('Administrador'), ...categorias.categoriaValidator, (req, res, next) => {
+	const { validationResult } = require('express-validator');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+	next();
+}, categorias.update)
 
 // DELETE: api/categorias/5
 router.delete('/:id', Authorize('Administrador'), categorias.delete)

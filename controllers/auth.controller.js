@@ -122,6 +122,7 @@ self.requestRegistration = async function (req, res, next) {
             }
 
             registroExistente.nombre = nombreCompleto.trim()
+            registroExistente.rol = 'Usuario'
             registroExistente.passwordhash = passwordHash
             registroExistente.codigohash = generaHashCodigo(emailNormalizado, codigo)
             registroExistente.expiracion = expiracion
@@ -146,6 +147,7 @@ self.requestRegistration = async function (req, res, next) {
                 id: crypto.randomUUID(),
                 email: emailNormalizado,
                 nombre: nombreCompleto.trim(),
+                rol: 'Usuario',
                 passwordhash: passwordHash,
                 codigohash: generaHashCodigo(emailNormalizado, codigo),
                 expiracion: expiracion,
@@ -211,7 +213,11 @@ self.verifyRegistration = async function (req, res, next) {
             return next(createHttpError(409, 'Ya existe una cuenta registrada con ese correo electronico.'))
         }
 
-        const rolUsuario = await obtieneRolUsuario()
+        const rolPendiente = (pendiente.rol || 'Usuario').trim()
+        const rolUsuario = await rol.findOne({ where: { nombre: rolPendiente } })
+        if (!rolUsuario)
+            return next(createHttpError(500, 'No se encontro el rol configurado para el registro pendiente.'))
+
         const creado = await usuario.create({
             id: crypto.randomUUID(),
             email: email,

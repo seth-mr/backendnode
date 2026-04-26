@@ -6,8 +6,13 @@ let self = {}
 
 self.productoValidator = [
     body('titulo', 'El campo {0} es obligatorio').not().isEmpty(),
+    body('titulo', 'El campo {0} debe tener máximo 255 caracteres').isLength({ max: 255 }),
     body('descripcion', 'El campo {0} es obligatorio').not().isEmpty(),
-    body('precio', 'El campo {0} es obligatorio').not().isEmpty().isDecimal({ force_decimal: false }),
+    body('descripcion', 'El campo {0} debe tener máximo 2000 caracteres').isLength({ max: 2000 }),
+    body('precio', 'El campo {0} es obligatorio').not().isEmpty(),
+    body('precio', 'El campo {0} debe ser un decimal válido').isDecimal({ force_decimal: false, decimal_digits: '0,2' }),
+    body('precio', 'El campo {0} debe estar entre 0.01 y 99999999.99').isFloat({ min: 0.01, max: 99999999.99 }),
+    body('archivoid').optional({ nullable: true }).isInt({ min: 1 }).withMessage('El campo archivoid debe ser un entero positivo'),
 ]
 
 // GET: api/productos

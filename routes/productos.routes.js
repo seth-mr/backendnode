@@ -9,10 +9,20 @@ router.get('/', Authorize('Usuario,Administrador'), productos.getAll)
 router.get('/:id', Authorize('Usuario,Administrador'), productos.get)
 
 // POST: api/productos
-router.post('/', Authorize('Administrador'), productos.productoValidator, productos.create)
+router.post('/', Authorize('Administrador'), ...productos.productoValidator, (req, res, next) => {
+	const { validationResult } = require('express-validator');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+	next();
+}, productos.create)
 
 // PUT: api/productos/5
-router.put('/:id', Authorize('Administrador'), productos.productoValidator, productos.update)
+router.put('/:id', Authorize('Administrador'), ...productos.productoValidator, (req, res, next) => {
+	const { validationResult } = require('express-validator');
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+	next();
+}, productos.update)
 
 // DELETE: api/productos/5
 router.delete('/:id', Authorize('Administrador'), productos.delete)
